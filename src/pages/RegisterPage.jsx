@@ -17,11 +17,18 @@ function RegisterPage() {
     role: 'cliente'
   });
 
+  const formatPhone = (value) => {
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+    if (digits.length <= 2) return `(${digits}`;
+    if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'telefone' ? formatPhone(value) : value
     }));
   };
 
@@ -29,7 +36,6 @@ function RegisterPage() {
     e.preventDefault();
     setError('');
 
-    // Validações
     if (formData.senha !== formData.confirmarSenha) {
       setError('As senhas não correspondem');
       return;
@@ -45,7 +51,7 @@ function RegisterPage() {
       return;
     }
 
-    if (formData.telefone.trim().length < 10) {
+    if (formData.telefone.replace(/\D/g, '').length < 10) {
       setError('Telefone inválido');
       return;
     }
@@ -54,7 +60,7 @@ function RegisterPage() {
 
     const result = await register({
       nome: formData.nome,
-      telefone: formData.telefone,
+      telefone: formData.telefone.replace(/\D/g, ''),
       senha: formData.senha,
       role: formData.role
     });
@@ -70,7 +76,6 @@ function RegisterPage() {
 
   return (
     <div className="auth-container">
-      {/* Botão Voltar */}
       <button 
         onClick={() => navigate(-1)} 
         className="btn-back"

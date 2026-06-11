@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Phone, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Phone, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
 
@@ -10,16 +10,22 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    nome: '',
     telefone: '',
     senha: ''
   });
+
+  const formatPhone = (value) => {
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+    if (digits.length <= 2) return `(${digits}`;
+    if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'telefone' ? formatPhone(value) : value
     }));
   };
 
@@ -27,12 +33,7 @@ function LoginPage() {
     e.preventDefault();
     setError('');
 
-    if (!formData.nome.trim()) {
-      setError('Digite seu nome completo');
-      return;
-    }
-
-    if (!formData.telefone.trim()) {
+    if (formData.telefone.replace(/\D/g, '').length < 10) {
       setError('Digite seu telefone');
       return;
     }
@@ -44,7 +45,7 @@ function LoginPage() {
 
     setLoading(true);
 
-    const result = await login(formData.nome, formData.telefone, formData.senha);
+    const result = await login(formData.telefone.replace(/\D/g, ''), formData.senha);
 
     if (result.success) {
       navigate('/');
@@ -57,7 +58,6 @@ function LoginPage() {
 
   return (
     <div className="auth-container">
-      {/* Botão Voltar */}
       <button 
         onClick={() => navigate(-1)} 
         className="btn-back"
@@ -79,7 +79,6 @@ function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit}>
-
           <div className="form-group">
             <label htmlFor="telefone">Telefone</label>
             <div className="input-wrapper">
