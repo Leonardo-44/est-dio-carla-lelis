@@ -25,6 +25,7 @@ export function AuthProvider({ children }) {
       });
       setUser(response.data.user);
     } catch (err) {
+      console.error('Erro ao verificar token:', err);
       localStorage.removeItem('token');
       setUser(null);
     } finally {
@@ -32,33 +33,62 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const login = async (nome, telefone, senha) => {
+  // LOGIN - Apenas Telefone + Senha
+  const login = async (telefone, senha) => {
     try {
       setError(null);
+      
+      // Validar dados
+      if (!telefone || !senha) {
+        const message = 'Telefone e senha são obrigatórios';
+        setError(message);
+        return { success: false, error: message };
+      }
+
+      // Fazer requisição ao backend
       const response = await api.post('/auth/login', { 
-        nome, 
-        telefone, 
+        telefone: telefone.replace(/\D/g, ''),
         senha 
       });
+
       const { token, user } = response.data;
       
+      // Salvar token
       localStorage.setItem('token', token);
       setUser(user);
       
       return { success: true };
     } catch (err) {
-      const message = err.response?.data?.message || 'Erro ao fazer login. Verifique nome, telefone e senha.';
+      const message = err.response?.data?.message || 'Erro ao fazer login. Verifique telefone e senha.';
       setError(message);
+      console.error('Erro no login:', err);
       return { success: false, error: message };
     }
   };
 
+  // REGISTRO - Nome + Telefone + Senha
   const register = async (dados) => {
     try {
       setError(null);
-      const response = await api.post('/auth/register', dados);
+
+      // Validar dados
+      if (!dados.nome || !dados.telefone || !dados.senha) {
+        const message = 'Nome, telefone e senha são obrigatórios';
+        setError(message);
+        return { success: false, error: message };
+      }
+
+      // Fazer requisição ao backend
+      const response = await api.post('/auth/register', {
+        nome: dados.nome.trim(),
+        telefone: dados.telefone.replace(/\D/g, ''),
+        senha: dados.senha,
+        role: dados.role || 'cliente'
+      });
+
       const { token, user } = response.data;
       
+      // Salvar token
       localStorage.setItem('token', token);
       setUser(user);
       
@@ -66,16 +96,19 @@ export function AuthProvider({ children }) {
     } catch (err) {
       const message = err.response?.data?.message || 'Erro ao registrar. Tente novamente.';
       setError(message);
+      console.error('Erro no registro:', err);
       return { success: false, error: message };
     }
   };
 
+  // LOGOUT
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
     setError(null);
   };
 
+  // Valor do context
   const value = {
     user,
     loading,
@@ -95,6 +128,7 @@ export function AuthProvider({ children }) {
   );
 }
 
+// Hook para usar o context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {

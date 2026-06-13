@@ -1,0 +1,311 @@
+/* ========== FINANCEIRO ADMIN ========== */
+.financeiro-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.financeiro-header h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--dark-pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 0.3rem 0;
+}
+
+.financeiro-subtitle {
+  color: var(--gray-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ========== CARDS DE RESUMO ========== */
+.financeiro-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.financeiro-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.financeiro-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.financeiro-card.destaque {
+  border-color: rgba(233, 30, 99, 0.2);
+  background: linear-gradient(135deg, var(--white) 0%, var(--very-light-pink) 100%);
+}
+
+.financeiro-card.confirmado {
+  border-color: rgba(76, 175, 80, 0.2);
+}
+
+.financeiro-card.pendente {
+  border-color: rgba(255, 193, 7, 0.2);
+}
+
+.financeiro-card.cancelado {
+  border-color: rgba(244, 67, 54, 0.15);
+}
+
+.financeiro-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.financeiro-card.destaque .financeiro-card-icon {
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--light-pink) 100%);
+  color: white;
+}
+
+.financeiro-card.confirmado .financeiro-card-icon {
+  background: rgba(76, 175, 80, 0.12);
+  color: #4CAF50;
+}
+
+.financeiro-card.pendente .financeiro-card-icon {
+  background: rgba(255, 193, 7, 0.12);
+  color: #f57f17;
+}
+
+.financeiro-card.cancelado .financeiro-card-icon {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+.financeiro-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.financeiro-card-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--gray-text);
+}
+
+.financeiro-card-valor {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--dark-gray);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.financeiro-card.destaque .financeiro-card-valor {
+  color: var(--primary-pink);
+}
+
+.financeiro-card-sub {
+  font-size: 0.78rem;
+  color: var(--gray-text);
+  font-weight: 500;
+}
+
+/* ========== SEÇÃO INFERIOR ========== */
+.financeiro-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--dark-gray);
+  margin: 0 0 1.2rem 0;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--very-light-pink);
+}
+
+/* ========== TOP SERVIÇOS ========== */
+.top-servicos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.top-servico-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.top-servico-rank {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--light-pink) 100%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.top-servico-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.top-servico-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.top-servico-nome {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-servico-valor {
+  font-size: 0.9rem;
+  color: var(--primary-pink);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.top-servico-bar-track {
+  width: 100%;
+  height: 6px;
+  background: var(--light-gray);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.3rem;
+}
+
+.top-servico-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-pink) 0%, var(--light-pink) 100%);
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+.top-servico-qtd {
+  font-size: 0.75rem;
+  color: var(--gray-text);
+  font-weight: 500;
+}
+
+/* ========== ÚLTIMOS CONFIRMADOS ========== */
+.ultimos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.ultimo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--lighter-gray);
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  transition: all 0.2s ease;
+}
+
+.ultimo-item:hover {
+  background: var(--very-light-pink);
+  border-color: rgba(233, 30, 99, 0.2);
+}
+
+.ultimo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.ultimo-cliente {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ultimo-servico {
+  font-size: 0.78rem;
+  color: var(--primary-pink);
+  font-weight: 600;
+}
+
+.ultimo-data {
+  font-size: 0.75rem;
+  color: var(--gray-text);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ultimo-valor {
+  font-size: 0.95rem;
+  color: var(--dark-gray);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1100px) {
+  .financeiro-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .financeiro-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .financeiro-bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .financeiro-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .financeiro-card-valor {
+    font-size: 1.2rem;
+  }
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, Phone, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
+import { User, Phone, Lock, AlertCircle, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
 
@@ -9,6 +9,8 @@ function RegisterPage() {
   const { register } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showSenha, setShowSenha] = useState(false);
+  const [showConfirmar, setShowConfirmar] = useState(false);
   const [formData, setFormData] = useState({
     nome: '',
     telefone: '',
@@ -36,8 +38,13 @@ function RegisterPage() {
     e.preventDefault();
     setError('');
 
-    if (formData.senha !== formData.confirmarSenha) {
-      setError('As senhas não correspondem');
+    if (formData.nome.trim().length < 3) {
+      setError('Nome deve ter no mínimo 3 caracteres');
+      return;
+    }
+
+    if (formData.telefone.replace(/\D/g, '').length < 10) {
+      setError('Telefone inválido');
       return;
     }
 
@@ -46,13 +53,8 @@ function RegisterPage() {
       return;
     }
 
-    if (formData.nome.trim().length < 3) {
-      setError('Nome deve ter no mínimo 3 caracteres');
-      return;
-    }
-
-    if (formData.telefone.replace(/\D/g, '').length < 10) {
-      setError('Telefone inválido');
+    if (formData.senha !== formData.confirmarSenha) {
+      setError('As senhas não correspondem');
       return;
     }
 
@@ -70,14 +72,14 @@ function RegisterPage() {
     } else {
       setError(result.error);
     }
-    
+
     setLoading(false);
   };
 
   return (
     <div className="auth-container">
-      <button 
-        onClick={() => navigate(-1)} 
+      <button
+        onClick={() => navigate(-1)}
         className="btn-back"
         title="Voltar"
       >
@@ -131,10 +133,10 @@ function RegisterPage() {
 
           <div className="form-group">
             <label htmlFor="senha">Senha</label>
-            <div className="input-wrapper">
+            <div className="input-wrapper password-wrapper">
               <Lock size={18} />
               <input
-                type="password"
+                type={showSenha ? 'text' : 'password'}
                 id="senha"
                 name="senha"
                 placeholder="Mínimo 6 caracteres"
@@ -142,15 +144,23 @@ function RegisterPage() {
                 onChange={handleChange}
                 required
               />
+              <button
+                type="button"
+                className="btn-toggle-password"
+                onClick={() => setShowSenha(v => !v)}
+                title={showSenha ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {showSenha ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
           </div>
 
           <div className="form-group">
             <label htmlFor="confirmarSenha">Confirmar Senha</label>
-            <div className="input-wrapper">
+            <div className="input-wrapper password-wrapper">
               <Lock size={18} />
               <input
-                type="password"
+                type={showConfirmar ? 'text' : 'password'}
                 id="confirmarSenha"
                 name="confirmarSenha"
                 placeholder="Confirme sua senha"
@@ -158,11 +168,19 @@ function RegisterPage() {
                 onChange={handleChange}
                 required
               />
+              <button
+                type="button"
+                className="btn-toggle-password"
+                onClick={() => setShowConfirmar(v => !v)}
+                title={showConfirmar ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {showConfirmar ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="btn-submit"
             disabled={loading}
           >

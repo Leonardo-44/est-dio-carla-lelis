@@ -652,3 +652,305 @@
   background-color: var(--primary-pink);
   color: var(--white);
 }
+
+/* ========== ABAS ========== */
+.dashboard-tabs {
+  display: flex;
+  gap: 0.3rem;
+  padding: 1rem 2rem 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  border-bottom: 2px solid var(--border-light);
+}
+ 
+.dashboard-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--gray-text);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
+  border-radius: 8px 8px 0 0;
+}
+ 
+.dashboard-tab:hover {
+  color: var(--primary-pink);
+  background: var(--very-light-pink);
+}
+ 
+.dashboard-tab.active {
+  color: var(--primary-pink);
+  border-bottom-color: var(--primary-pink);
+  background: var(--very-light-pink);
+}
+
+/* ── Botão concluir ──────────────────────────────────────────── */
+.btn-concluir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: #f0fdf4;
+  color: #16a34a;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-concluir:hover {
+  background: #dcfce7;
+}
+
+/* ── Botão excluir ───────────────────────────────────────────── */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: #fff1f2;
+  color: #e11d48;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-delete:hover {
+  background: #ffe4e6;
+}
+
+/* ── Badge de preço no card ──────────────────────────────────── */
+.preco-badge {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  padding: 1px 8px;
+  margin-left: 6px;
+}
+
+/* ── Status concluído ────────────────────────────────────────── */
+.status.concluido {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+/* ── Select de status inline ─────────────────────────────────── */
+.status-select {
+  appearance: none;
+  border: 1px solid var(--color-border-secondary, #ddd);
+  border-radius: 999px;
+  padding: 4px 28px 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  transition: border-color 0.15s;
+}
+.status-select:hover { border-color: var(--color-border-primary, #aaa); }
+.status-select:focus { outline: none; border-color: #2563eb; }
+
+/* Cores por status atual */
+.status-select.pendente   { background-color: #fffbeb; color: #92400e; border-color: #fcd34d; }
+.status-select.confirmado { background-color: #eff6ff; color: #1d4ed8; border-color: #93c5fd; }
+.status-select.concluido  { background-color: #f0fdf4; color: #15803d; border-color: #86efac; }
+.status-select.cancelado  { background-color: #fff1f2; color: #be123c; border-color: #fda4af; }
+
+/* ── Botão excluir ───────────────────────────────────────────── */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: #fff1f2;
+  color: #e11d48;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-delete:hover {
+  background: #ffe4e6;
+}
+
+/* ── Badge de preço no card ──────────────────────────────────── */
+.preco-badge {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  padding: 1px 8px;
+  margin-left: 6px;
+}
+
+/* ── Status concluído ────────────────────────────────────────── */
+.status.concluido {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+/* ── Select de status inline ─────────────────────────────────── */
+.status-select {
+  appearance: none;
+  border: 1px solid var(--color-border-secondary, #ddd);
+  border-radius: 999px;
+  padding: 4px 28px 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  transition: border-color 0.15s;
+}
+.status-select:hover { border-color: var(--color-border-primary, #aaa); }
+.status-select:focus { outline: none; border-color: #2563eb; }
+
+/* Cores por status atual */
+.status-select.pendente   { background-color: #fffbeb; color: #92400e; border-color: #fcd34d; }
+.status-select.confirmado { background-color: #eff6ff; color: #1d4ed8; border-color: #93c5fd; }
+.status-select.concluido  { background-color: #f0fdf4; color: #15803d; border-color: #86efac; }
+.status-select.cancelado  { background-color: #fff1f2; color: #be123c; border-color: #fda4af; }
+
+/* ── Botão excluir ───────────────────────────────────────────── */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: #fff1f2;
+  color: #e11d48;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-delete:hover {
+  background: #ffe4e6;
+}
+
+/* ── Filtro de data ──────────────────────────────────────────── */
+.filtro-data {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 4px;
+}
+
+.filtro-data-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filtro-data-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filtro-data-group label {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary, #777);
+  white-space: nowrap;
+}
+
+.filtro-data-group input[type="date"] {
+  border: 1px solid var(--color-border-secondary, #ddd);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  color: var(--color-text-primary, #222);
+  background: var(--color-background-primary, #fff);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.filtro-data-group input[type="date"]:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.filtro-data-sep {
+  color: var(--color-text-tertiary, #bbb);
+  font-size: 0.9rem;
+}
+
+.btn-limpar-data {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #777);
+  background: none;
+  border: 1px solid var(--color-border-tertiary, #e0e0e0);
+  border-radius: 999px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-limpar-data:hover {
+  background: var(--color-background-secondary, #f5f5f5);
+  color: var(--color-text-primary, #222);
+}
+
+.filtro-resultado {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary, #777);
+  margin: 6px 0 12px;
+}
+
+/* ── Badge de preço no card ──────────────────────────────────── */
+.preco-badge {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  padding: 1px 8px;
+  margin-left: 6px;
+}
+
+/* ── Status concluído ────────────────────────────────────────── */
+.status.concluido {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+ 
+@media (max-width: 480px) {
+  .dashboard-tabs {
+    padding: 0.8rem 1rem 0;
+    gap: 0.2rem;
+  }
+ 
+  .dashboard-tab {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.75rem;
+  }
+ 
+  .dashboard-tab span {
+    display: none;
+  }
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Phone, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Phone, Lock, AlertCircle, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
 
@@ -9,6 +9,7 @@ function LoginPage() {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     telefone: '',
     senha: ''
@@ -33,8 +34,9 @@ function LoginPage() {
     e.preventDefault();
     setError('');
 
+    // Validações
     if (formData.telefone.replace(/\D/g, '').length < 10) {
-      setError('Digite seu telefone');
+      setError('Digite seu telefone corretamente');
       return;
     }
 
@@ -45,7 +47,11 @@ function LoginPage() {
 
     setLoading(true);
 
-    const result = await login(formData.telefone.replace(/\D/g, ''), formData.senha);
+    // Enviar para login com telefone + senha
+    const result = await login(
+      formData.telefone.replace(/\D/g, ''),
+      formData.senha
+    );
 
     if (result.success) {
       navigate('/');
@@ -97,10 +103,10 @@ function LoginPage() {
 
           <div className="form-group">
             <label htmlFor="senha">Senha</label>
-            <div className="input-wrapper">
+            <div className="input-wrapper password-wrapper">
               <Lock size={18} />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 id="senha"
                 name="senha"
                 placeholder="Sua senha"
@@ -108,6 +114,18 @@ function LoginPage() {
                 onChange={handleChange}
                 required
               />
+              <button
+                type="button"
+                className="btn-toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+                title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+              >
+                {showPassword ? (
+                  <EyeOff size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
+              </button>
             </div>
           </div>
 

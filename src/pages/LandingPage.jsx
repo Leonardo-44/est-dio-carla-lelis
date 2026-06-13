@@ -3,6 +3,9 @@ import { Sparkles, Calendar, Users, Shield, Scissors, Brush, Heart, Star } from 
 import { useAuth } from '../context/AuthContext';
 import '../styles/LandingPage.css';
 
+//img
+import LogoCarla from "../../public/FundoHero.png";
+
 function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated, isAdmin, isCliente } = useAuth();
@@ -14,7 +17,7 @@ function LandingPage() {
       <header className="header">
         <div className="header-content">
           <div className="logo">
-            <img src="../../public/FundoHero.png" alt="Logo Estúdio Carla Lelis" width="8%"/>
+            <img src={LogoCarla} alt="Logo Estúdio Carla Lelis" width="8%"/>
             <h1>Estúdio Carla Lelis</h1>
           </div>
           <nav className="nav">
