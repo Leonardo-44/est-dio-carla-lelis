@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Calendar, Scissors, DollarSign, LayoutDashboard, Trash2, X } from 'lucide-react';
+import { LogOut, Calendar, Scissors, DollarSign, LayoutDashboard, Trash2, X, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/Api';
 
 import ServicosAdmin from '../components/ServicosAdmin/ServicosAdmin';
 import FinanceiroAdmin from '../components/FinanceiroAdmin/FinanceiroAdmin';
+import FuncionariasAdmin from '../components/FuncionariasAdmin/FuncionariasAdmin';
 
 import '../styles/Dashboard.css';
 
@@ -13,6 +14,7 @@ const ABAS = [
   { id: 'agendamentos', label: 'Agendamentos', icon: LayoutDashboard },
   { id: 'servicos',     label: 'Serviços',     icon: Scissors        },
   { id: 'financeiro',   label: 'Financeiro',   icon: DollarSign      },
+  { id: 'funcionarias', label: 'Funcionárias', icon: Users},
 ];
 
 const STATUS_MAP = {
@@ -265,6 +267,12 @@ function AdminDashboard() {
         {abaAtiva === 'financeiro' && (
           <div className="dashboard-card">
             <FinanceiroAdmin />
+          </div>
+        )}
+
+        {abaAtiva === 'funcionarias' && (
+          <div className="dashboard-card">
+            <FuncionariasAdmin />
           </div>
         )}
       </main>

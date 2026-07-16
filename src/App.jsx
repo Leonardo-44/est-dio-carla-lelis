@@ -1,15 +1,21 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext.jsx';
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 
 // Pages
-import LandingPage from './pages/LandingPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import AdminDashboard from './pages/AdminDashboard';
-import ClientDashboard from './pages/ClientDashboard';
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import AdminDashboard from "./pages/AdminDashboard";
+import ClientDashboard from "./pages/ClientDashboard";
+import FuncionariaDashboard from "./pages/FuncionariaDashboard.jsx";
 
-import './styles/App.css';
+import "./styles/App.css";
 
 function App() {
   return (
@@ -19,7 +25,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          
+
           {/* Rotas protegidas - Admin */}
           <Route
             path="/admin/dashboard"
@@ -29,7 +35,16 @@ function App() {
               </ProtectedRoute>
             }
           />
-          
+
+          <Route
+            path="/funcionaria"
+            element={
+              <ProtectedRoute requiredRole="funcionaria">
+                <FuncionariaDashboard />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Rotas protegidas - Cliente */}
           <Route
             path="/cliente/agendar"
@@ -39,7 +54,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          
+
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </AuthProvider>

@@ -41,11 +41,9 @@ function gerarSlots(diaSemana, duracaoMinutos) {
   let m = 0;
 
   while (true) {
-    // Calcula quando este slot terminaria
     const totalMinInicio = h * 60 + m;
     const totalMinFim = totalMinInicio + duracaoMinutos;
 
-    // Não pode ultrapassar o horário de fechamento
     if (totalMinFim > config.fim * 60) break;
 
     slots.push({
@@ -54,14 +52,12 @@ function gerarSlots(diaSemana, duracaoMinutos) {
       label: `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`,
     });
 
-    // Avança 30 min
     m += 30;
     if (m >= 60) {
       m = 0;
       h++;
     }
 
-    // Limite de segurança
     if (h >= 24) break;
   }
 
@@ -78,7 +74,6 @@ function gerarDiasDisponiveis() {
     const d = new Date(hoje);
     d.setDate(hoje.getDate() + i);
     if (d.getDay() !== 0) {
-      // exclui domingo
       dias.push(d);
     }
   }
@@ -87,17 +82,15 @@ function gerarDiasDisponiveis() {
 
 // ─── Formata data para chave de lookup ──────────────────────
 function toDateKey(date) {
-  return date.toISOString().slice(0, 10); // "YYYY-MM-DD"
+  return date.toISOString().slice(0, 10);
 }
 
 // ─── Monta datetime-local string ────────────────────────────
-// Substitua a função montarDataHora por esta:
 function montarDataHora(date, hora, minuto) {
   const d = new Date(date);
   d.setHours(hora, minuto, 0, 0);
-  // Envia com offset local (-03:00) para o backend não confundir com UTC
   const pad = (n) => String(n).padStart(2, "0");
-  const offset = -d.getTimezoneOffset(); // em minutos
+  const offset = -d.getTimezoneOffset();
   const sinal = offset >= 0 ? "+" : "-";
   const oh = pad(Math.floor(Math.abs(offset) / 60));
   const om = pad(Math.abs(offset) % 60);
@@ -109,22 +102,23 @@ function montarDataHora(date, hora, minuto) {
 function AppointmentForm({ servicos, onAgendamentoCriado }) {
   const [loading, setLoading] = useState(false);
   const [loadingSlots, setLoadingSlots] = useState(false);
+  const [loadingFuncionarias, setLoadingFuncionarias] = useState(false);
   const [sucesso, setSucesso] = useState("");
   const [erro, setErro] = useState("");
   const [servicoId, setServicoId] = useState("");
+  const [funcionarias, setFuncionarias] = useState([]);
+  const [funcionariaId, setFuncionariaId] = useState("");
   const [diaSelecionado, setDiaSelecionado] = useState(null);
   const [slotSelecionado, setSlotSelecionado] = useState(null);
   const [observacoes, setObservacoes] = useState("");
-  const [horariosOcupados, setHorariosOcupados] = useState({}); // { "YYYY-MM-DD": Set<"HH:MM"> }
-  const [mesSelecionado, setMesSelecionado] = useState(0); // índice nos diasDisponiveis agrupados
+  const [horariosOcupados, setHorariosOcupados] = useState({}); // { "YYYY-MM-DD_funcId": Set<"HH:MM"> }
+  const [mesSelecionado, setMesSelecionado] = useState(0);
 
   const diasDisponiveis = gerarDiasDisponiveis();
 
-  // Serviço selecionado completo
   const servico = servicos.find((s) => String(s.id) === String(servicoId));
   const duracao = servico?.duracao ?? 60;
 
-  // Agrupa dias por mês para navegação
   const diasPorMes = diasDisponiveis.reduce((acc, d) => {
     const key = `${d.getFullYear()}-${d.getMonth()}`;
     if (!acc[key]) acc[key] = [];
@@ -135,18 +129,40 @@ function AppointmentForm({ servicos, onAgendamentoCriado }) {
   const mesAtual = mesesKeys[mesSelecionado] ?? mesesKeys[0];
   const diasDoMes = diasPorMes[mesAtual] ?? [];
 
-  // Busca horários ocupados do dia selecionado
+  // ── Busca funcionárias que atendem o serviço escolhido ──────
+  useEffect(() => {
+    if (!servicoId) {
+      setFuncionarias([]);
+      setFuncionariaId("");
+      return;
+    }
+
+    setFuncionariaId("");
+    setDiaSelecionado(null);
+    setSlotSelecionado(null);
+    setLoadingFuncionarias(true);
+
+    api
+      .get(`/servicos/${servicoId}/funcionarias`)
+      .then((response) => setFuncionarias(response.data))
+      .catch((err) => {
+        console.error("Erro ao buscar funcionárias do serviço:", err);
+        setFuncionarias([]);
+      })
+      .finally(() => setLoadingFuncionarias(false));
+  }, [servicoId]);
+
+  // ── Busca horários ocupados do dia + funcionária selecionados ──
   const buscarOcupados = useCallback(
-    async (date) => {
-      const key = toDateKey(date);
-      if (horariosOcupados[key]) return; // já carregado
+    async (date, funcId) => {
+      const key = `${toDateKey(date)}_${funcId}`;
+      if (horariosOcupados[key]) return;
 
       setLoadingSlots(true);
       try {
         const response = await api.get("/agendamentos/horarios-ocupados", {
-          params: { data: key },
+          params: { data: toDateKey(date), funcionaria_id: funcId },
         });
-        // response.data: ["HH:MM", "HH:MM", ...]
         setHorariosOcupados((prev) => ({
           ...prev,
           [key]: new Set(response.data),
@@ -160,19 +176,16 @@ function AppointmentForm({ servicos, onAgendamentoCriado }) {
     [horariosOcupados],
   );
 
-  // Quando muda o dia, busca ocupados e limpa slot
   useEffect(() => {
-    if (!diaSelecionado) return;
+    if (!diaSelecionado || !funcionariaId) return;
     setSlotSelecionado(null);
-    buscarOcupados(diaSelecionado);
-  }, [diaSelecionado]); // eslint-disable-line
+    buscarOcupados(diaSelecionado, funcionariaId);
+  }, [diaSelecionado, funcionariaId]); // eslint-disable-line
 
-  // Quando muda serviço, limpa slot (duração pode mudar)
   useEffect(() => {
     setSlotSelecionado(null);
   }, [servicoId]);
 
-  // Slots do dia selecionado
   const slots = diaSelecionado
     ? gerarSlots(diaSelecionado.getDay(), duracao)
     : [];
@@ -182,11 +195,15 @@ function AppointmentForm({ servicos, onAgendamentoCriado }) {
     if (!diaSelecionado) return true;
     const d = new Date(diaSelecionado);
     d.setHours(slot.hora, slot.minuto, 0, 0);
-    return d > agora; // remove slots que já passaram
+    return d > agora;
   });
 
-  const ocupadosHoje = diaSelecionado
-    ? (horariosOcupados[toDateKey(diaSelecionado)] ?? null)
+  const chaveOcupados =
+    diaSelecionado && funcionariaId
+      ? `${toDateKey(diaSelecionado)}_${funcionariaId}`
+      : null;
+  const ocupadosHoje = chaveOcupados
+    ? (horariosOcupados[chaveOcupados] ?? null)
     : null;
 
   const isOcupado = (slot) => {
@@ -201,6 +218,10 @@ function AppointmentForm({ servicos, onAgendamentoCriado }) {
 
     if (!servicoId) {
       setErro("Selecione um serviço.");
+      return;
+    }
+    if (!funcionariaId) {
+      setErro("Selecione uma profissional.");
       return;
     }
     if (!diaSelecionado) {
@@ -222,18 +243,19 @@ function AppointmentForm({ servicos, onAgendamentoCriado }) {
     try {
       await onAgendamentoCriado({
         servico_id: servicoId,
+        funcionaria_id: funcionariaId,
         data_hora: dataHora,
         observacoes,
       });
       setSucesso("Agendamento realizado com sucesso!");
       setServicoId("");
+      setFuncionariaId("");
       setDiaSelecionado(null);
       setSlotSelecionado(null);
       setObservacoes("");
-      // Invalida cache do dia para recarregar na próxima visita
       setHorariosOcupados((prev) => {
         const next = { ...prev };
-        delete next[toDateKey(diaSelecionado)];
+        if (chaveOcupados) delete next[chaveOcupados];
         return next;
       });
       setTimeout(() => setSucesso(""), 3000);
@@ -246,7 +268,6 @@ function AppointmentForm({ servicos, onAgendamentoCriado }) {
     }
   };
 
-  // Rótulo do mês atual
   const [anoMes, idxMes] = (mesAtual ?? "-").split("-");
   const rotuloMes =
     idxMes !== undefined ? `${MESES[Number(idxMes)]} ${anoMes}` : "";
@@ -293,55 +314,87 @@ function AppointmentForm({ servicos, onAgendamentoCriado }) {
           </select>
         </div>
 
+        {/* ── Profissional ──────────────────────────────────── */}
+        {servicoId && (
+          <div className="form-group">
+            <label>Profissional</label>
+            {loadingFuncionarias ? (
+              <p className="slots-loading">Carregando profissionais...</p>
+            ) : funcionarias.length === 0 ? (
+              <p className="slots-vazio">
+                Nenhuma profissional disponível para este serviço no momento.
+              </p>
+            ) : (
+              <div className="funcionarias-grid">
+                {funcionarias.map((f) => {
+                  const selecionada = String(funcionariaId) === String(f.id);
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      className={`btn-funcionaria ${selecionada ? "ativo" : ""}`}
+                      onClick={() => setFuncionariaId(String(f.id))}
+                    >
+                      {f.nome}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* ── Calendário de dias ───────────────────────────── */}
-        <div className="form-group">
-          <label>Data</label>
+        {funcionariaId && (
+          <div className="form-group">
+            <label>Data</label>
 
-          <div className="calendar-nav">
-            <button
-              type="button"
-              className="btn-nav"
-              onClick={() => setMesSelecionado((i) => Math.max(0, i - 1))}
-              disabled={mesSelecionado === 0}
-            >
-              ‹
-            </button>
-            <span className="calendar-mes">{rotuloMes}</span>
-            <button
-              type="button"
-              className="btn-nav"
-              onClick={() =>
-                setMesSelecionado((i) => Math.min(mesesKeys.length - 1, i + 1))
-              }
-              disabled={mesSelecionado === mesesKeys.length - 1}
-            >
-              ›
-            </button>
-          </div>
+            <div className="calendar-nav">
+              <button
+                type="button"
+                className="btn-nav"
+                onClick={() => setMesSelecionado((i) => Math.max(0, i - 1))}
+                disabled={mesSelecionado === 0}
+              >
+                ‹
+              </button>
+              <span className="calendar-mes">{rotuloMes}</span>
+              <button
+                type="button"
+                className="btn-nav"
+                onClick={() =>
+                  setMesSelecionado((i) => Math.min(mesesKeys.length - 1, i + 1))
+                }
+                disabled={mesSelecionado === mesesKeys.length - 1}
+              >
+                ›
+              </button>
+            </div>
 
-          <div className="calendar-grid">
-            {diasDoMes.map((d) => {
-              const selecionado =
-                diaSelecionado && toDateKey(d) === toDateKey(diaSelecionado);
-              return (
-                <button
-                  key={toDateKey(d)}
-                  type="button"
-                  className={`btn-dia ${selecionado ? "ativo" : ""}`}
-                  onClick={() => setDiaSelecionado(d)}
-                >
-                  <span className="btn-dia-semana">
-                    {DIAS_SEMANA[d.getDay()]}
-                  </span>
-                  <span className="btn-dia-numero">{d.getDate()}</span>
-                </button>
-              );
-            })}
+            <div className="calendar-grid">
+              {diasDoMes.map((d) => {
+                const selecionado =
+                  diaSelecionado && toDateKey(d) === toDateKey(diaSelecionado);
+                return (
+                  <button
+                    key={toDateKey(d)}
+                    type="button"
+                    className={`btn-dia ${selecionado ? "ativo" : ""}`}
+                    onClick={() => setDiaSelecionado(d)}
+                  >
+                    <span className="btn-dia-semana">
+                      {DIAS_SEMANA[d.getDay()]}
+                    </span>
+                    <span className="btn-dia-numero">{d.getDate()}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ── Grid de horários ─────────────────────────────── */}
-        {diaSelecionado && (
+        {diaSelecionado && funcionariaId && (
           <div className="form-group">
             <label>
               Horário

@@ -1,0 +1,48 @@
+/* ── Data de hoje ─────────────────────────────────────────────── */
+.funcionaria-dashboard .data-hoje {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gray-text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: capitalize;
+  margin-bottom: 1.8rem;
+}
+
+.funcionaria-dashboard .data-hoje svg {
+  color: var(--primary-pink);
+}
+
+/* ── Ícones inline nos itens ──────────────────────────────────── */
+.funcionaria-dashboard .icon-inline {
+  color: var(--primary-pink);
+  vertical-align: -2px;
+  margin-right: 4px;
+}
+
+/* ── Botão concluir maior/mais visível na agenda ─────────────── */
+.funcionaria-dashboard .btn-concluir {
+  padding: 0.5rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(129, 199, 132, 0.15) 100%);
+  color: #2e7d32;
+  border: 2px solid #4CAF50;
+}
+
+.funcionaria-dashboard .btn-concluir:hover {
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+@media (max-width: 480px) {
+  .funcionaria-dashboard .data-hoje {
+    font-size: 0.85rem;
+  }
+}
