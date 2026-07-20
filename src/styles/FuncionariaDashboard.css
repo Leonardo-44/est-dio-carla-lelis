@@ -41,6 +41,21 @@
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
+.funcionaria-folga,
+.funcionaria-horario {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--gray-text, #666);
+  margin-top: 4px;
+}
+
+.funcionaria-folga {
+  color: var(--dark-pink, #C2185B);
+  font-weight: 600;
+}
+
 @media (max-width: 480px) {
   .funcionaria-dashboard .data-hoje {
     font-size: 0.85rem;

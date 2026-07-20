@@ -65,7 +65,7 @@ function gerarSlots(diaSemana, duracaoMinutos) {
 }
 
 // ─── Gera os próximos 60 dias úteis disponíveis ──────────────
-function gerarDiasDisponiveis() {
+function gerarDiasDisponiveis(diaFolga) {
   const dias = [];
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
@@ -73,7 +73,8 @@ function gerarDiasDisponiveis() {
   for (let i = 0; i <= 60; i++) {
     const d = new Date(hoje);
     d.setDate(hoje.getDate() + i);
-    if (d.getDay() !== 0) {
+    if (d.getDay() !== 0 && d.getDay() !== diaFolga) {
+      // exclui domingo (fechado) e o dia de folga da funcionária
       dias.push(d);
     }
   }
@@ -113,11 +114,15 @@ function AppointmentForm({ servicos, onAgendamentoCriado }) {
   const [observacoes, setObservacoes] = useState("");
   const [horariosOcupados, setHorariosOcupados] = useState({}); // { "YYYY-MM-DD_funcId": Set<"HH:MM"> }
   const [mesSelecionado, setMesSelecionado] = useState(0);
-
-  const diasDisponiveis = gerarDiasDisponiveis();
-
+  
+  
   const servico = servicos.find((s) => String(s.id) === String(servicoId));
+  const funcionariaSelecionada = funcionarias.find(
+    (f) => String(f.id) === String(funcionariaId)
+  );
   const duracao = servico?.duracao ?? 60;
+  
+  const diasDisponiveis = gerarDiasDisponiveis(funcionariaSelecionada?.dia_folga ?? null);
 
   const diasPorMes = diasDisponiveis.reduce((acc, d) => {
     const key = `${d.getFullYear()}-${d.getMonth()}`;

@@ -1,0 +1,130 @@
+/* ── Overlay do modal ─────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: var(--white, #fff);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--dark-gray, #333);
+  margin: 0;
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gray-text, #666);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.btn-close-modal:hover {
+  background: var(--light-gray, #f5f5f5);
+}
+
+.modal-subtitle {
+  font-size: 0.88rem;
+  color: var(--gray-text, #666);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Checklist de funcionárias ────────────────────────────────── */
+.funcionarias-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.funcionaria-check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border-light, #e0e0e0);
+  border-radius: 10px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.funcionaria-check-item:hover {
+  border-color: var(--primary-pink, #E91E63);
+  background: var(--very-light-pink, #FCE4EC);
+}
+
+.checkbox-custom {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border-light, #ccc);
+  background: var(--white, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.15s;
+  padding: 0;
+}
+
+.checkbox-custom.marcado {
+  background: linear-gradient(135deg, var(--primary-pink, #E91E63) 0%, var(--light-pink, #F48FB1) 100%);
+  border-color: var(--primary-pink, #E91E63);
+}
+
+.checkbox-custom:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.funcionaria-check-nome {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--dark-gray, #333);
+  cursor: pointer;
+  flex: 1;
+}
+
+.spin-icon {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.5rem;
+  }
+}

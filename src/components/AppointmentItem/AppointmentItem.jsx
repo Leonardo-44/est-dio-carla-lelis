@@ -1,4 +1,4 @@
-import { Calendar, Clock, DollarSign } from 'lucide-react';
+import { Calendar, Clock, DollarSign, User } from 'lucide-react';
 
 const STATUS_MAP = {
   pendente:   { label: '⏳ Pendente',   className: 'pendente'   },
@@ -37,6 +37,13 @@ function AppointmentItem({ agendamento, onCancelar }) {
             <Calendar size={15} />
             <span>{formatarData(agendamento.data_hora)}</span>
           </div>
+
+          {agendamento.funcionaria_nome && (
+            <div className="detail">
+              <User size={15} />
+              <span>{agendamento.funcionaria_nome}</span>
+            </div>
+          )}
 
           {agendamento.servico_preco != null && (
             <div className="detail">

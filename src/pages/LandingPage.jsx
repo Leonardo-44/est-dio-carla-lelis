@@ -317,7 +317,6 @@ function LandingPage() {
             >
               WhatsApp
             </a>
-            <a href="#">Contato</a>
           </div>
         </div>
       </footer>

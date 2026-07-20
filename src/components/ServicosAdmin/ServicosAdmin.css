@@ -76,7 +76,7 @@
 
 .form-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
@@ -269,6 +269,16 @@
   color: var(--primary-pink);
   font-weight: 800;
   font-size: 1rem;
+}
+
+.btn-funcionarias {
+  background: var(--very-light-pink, #FCE4EC);
+  color: var(--primary-pink, #E91E63);
+}
+
+.btn-funcionarias:hover {
+  background: var(--primary-pink, #E91E63);
+  color: white;
 }
 
 /* ========== RESPONSIVE ========== */

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, CheckCircle, XCircle, Clock, DollarSign, AlertCircle, Scissors } from 'lucide-react';
+import { Plus, Edit2, Trash2, CheckCircle, XCircle, Clock, DollarSign, AlertCircle, Scissors, Users } from 'lucide-react';
 
 import api from '../../services/Api';
 import '../../styles/Dashboard.css';
 import './ServicosAdmin.css';
+import GerenciarFuncionariasModal from './GerenciarFuncionariasModal/GerenciarFuncionariasModal';
 
 function ServicosAdmin() {
   const [servicos, setServicos] = useState([]);
@@ -18,6 +19,7 @@ function ServicosAdmin() {
     preco: '',
     duracao: '60'
   });
+  const [servicoParaFuncionarias, setServicoParaFuncionarias] = useState(null);
 
   useEffect(() => {
     buscarServicos();
@@ -260,6 +262,13 @@ function ServicosAdmin() {
                 </span>
                 <div className="servico-card-actions">
                   <button
+                    className="btn-icon btn-funcionarias"
+                    onClick={() => setServicoParaFuncionarias(servico)}
+                    title="Gerenciar profissionais"
+                  >
+                    <Users size={16} />
+                  </button>
+                  <button
                     className="btn-icon btn-editar"
                     onClick={() => abrirFormEdicao(servico)}
                     title="Editar"
@@ -303,6 +312,13 @@ function ServicosAdmin() {
             </div>
           ))}
         </div>
+      )}
+
+      {servicoParaFuncionarias && (
+        <GerenciarFuncionariasModal
+          servico={servicoParaFuncionarias}
+          onClose={() => setServicoParaFuncionarias(null)}
+        />
       )}
     </div>
   );

@@ -40,7 +40,7 @@
 
 .header-content h1 {
   font-size: 1.8rem;
-  background: linear-gradient(135deg, var(--primary-pink) 0%, var(--dark-pink) 100%);
+  background: var(--gold);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -662,8 +662,26 @@
   margin: 0 auto;
   width: 100%;
   border-bottom: 2px solid var(--border-light);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--light-pink) transparent;
 }
- 
+
+.dashboard-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.dashboard-tabs::-webkit-scrollbar-thumb {
+  background: var(--light-pink);
+  border-radius: 4px;
+}
+
+.dashboard-tabs::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .dashboard-tab {
   display: flex;
   align-items: center;
@@ -681,13 +699,15 @@
   letter-spacing: 0.3px;
   transition: all 0.2s ease;
   border-radius: 8px 8px 0 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
- 
+
 .dashboard-tab:hover {
   color: var(--primary-pink);
   background: var(--very-light-pink);
 }
- 
+
 .dashboard-tab.active {
   color: var(--primary-pink);
   border-bottom-color: var(--primary-pink);
@@ -1070,4 +1090,34 @@
 }
 .btn-close-modal:hover {
   background: var(--light-gray);
+}
+
+/* ── Tablet: reduz padding e fonte, mantém ícone + texto ────── */
+@media (max-width: 768px) {
+  .dashboard-tabs {
+    padding: 0.9rem 1.2rem 0;
+    gap: 0.2rem;
+  }
+
+  .dashboard-tab {
+    padding: 0.65rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ── Mobile: some com o texto, fica só o ícone ───────────────── */
+@media (max-width: 480px) {
+  .dashboard-tabs {
+    padding: 0.8rem 1rem 0;
+    gap: 0.3rem;
+  }
+
+  .dashboard-tab {
+    padding: 0.65rem 0.9rem;
+    font-size: 0.75rem;
+  }
+
+  .dashboard-tab span {
+    display: none;
+  }
 }
